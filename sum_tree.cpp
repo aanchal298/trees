@@ -1,0 +1,106 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int data;
+    struct node *left;
+    struct node *right;
+};
+struct node *newNode(int n)
+{
+    struct node *tem=(node*)malloc(sizeof(node));
+    tem->data=n;
+    tem->left=NULL;
+    tem->right=NULL;
+    return tem;
+};
+void insertrec(struct node *root,int n)
+{
+    struct node *temp;
+    temp=newNode(n);
+    if(root==NULL)
+    {
+        root=temp;
+        return;
+    }
+    if(root->data > n)
+    {
+        if(root->left==NULL)
+        {
+            root->left=temp;
+            return;
+        }
+        insertrec(root->left,n);
+    }
+    else
+    {
+        if(root->right==NULL)
+        {
+            root->right=temp;
+            return;
+        }
+        insertrec(root->right,n);
+    }
+}
+void inorder(struct node *root)
+{
+    if(root==NULL)
+        return;
+    inorder(root->left);
+    cout<<root->data<<" ";
+    inorder(root->right);
+}
+void levelorder(struct node *root)
+{
+    if(root==NULL)
+        return;
+    struct node *temp=root;
+    queue<struct node *> q;
+    while(temp!=NULL)
+    {
+        cout<<temp->data<<" ";
+        if(temp->left)
+            q.push(temp->left);
+        if(temp->right)
+            q.push(temp->right);
+        if(!q.empty())
+        {
+            temp=q.front();
+            q.pop();
+        }
+        else break;
+    }
+    cout<<endl;
+}
+
+int make(struct node *root)
+{
+    if(root==NULL)
+        return 0;
+    int p=root->data;
+    int l=make(root->left);
+    int r=make(root->right);
+
+    root->data=l+r;
+    return p+l+r;
+}
+
+
+int main()
+{
+    struct node *root = newNode(10);
+  root->left = newNode(-2);
+  root->right = newNode(6);
+  root->left->left = newNode(8);
+  root->left->right = newNode(-4);
+  root->right->left = newNode(7);
+  root->right->right = newNode(5);
+
+    inorder(root);
+    cout<<endl;
+    make(root);
+    inorder(root);
+    return 0;
+
+}
+
+
